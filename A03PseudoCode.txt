@@ -1,0 +1,6 @@
+/*
+Pseudocode for Assignment 3
+
+First manual commit and push of main program file and pseudocode.
+*/
+
