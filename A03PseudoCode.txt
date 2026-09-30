@@ -4,3 +4,25 @@ Pseudocode for Assignment 3
 First manual commit and push of main program file and pseudocode.
 */
 
+
+To do list
+- LAB 3 (SEE BELOW FOR DETAILS)
+- Plan the assignment program's structure, according to assignment req
+- List the methods that are required and that I will use
+- - list will try to be as granular as possible (loose coupling and highly cohesive
+
+List of classes and the methods that will likely be in them
+
+
+
+
+LAB DETAILS
+- Lab will be completed in a different solution than the current solution
+Classes for the lab
+- Main only instantiates the Run class
+Class Member
+
+Class UserInterface
+
+Class Run
+
