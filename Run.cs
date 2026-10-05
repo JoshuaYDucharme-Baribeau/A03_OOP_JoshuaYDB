@@ -78,11 +78,25 @@ namespace A03_OOP_JoshuaYDB
                     //remove a member
                     case ConsoleKey.D:
 
-                        //method call to remove a member
-                            //asks for a member ID,
-                            //checkks it exists,
-                                //  asks for confirmation befor deletionn
-                                //if not exist error message return to menu
+                        //if there are any strings in the list to remove
+                        if (members.Count > 0)
+                        {
+                            if (Remove_Member(members))
+                            {
+                                UserInterface.Clear_screen();
+                                UserInterface.Display_message("Deletion successful.");
+                                UserInterface.Block_program();
+                            }
+                        }
+                        //if there are no strings in the list to remove
+                        else
+                        {
+                            UserInterface.Display_error_message
+                                (
+                                    "There are no members to remove. Please add a member before removing one.",
+                                    "Press any key to return to the menu..."
+                                );
+                        }
 
                         break;
 
@@ -395,7 +409,7 @@ namespace A03_OOP_JoshuaYDB
                             ($"A file named \"{file_name}\" already exists.\n\n" +
                             $"***ARE YOU SURE YOU WOULD LIKE TO OVERWRITE IT?***\n" +
                             $"<Y>: Confirm and overwrite\n" +
-                            $"<N>: Cancel and return to name selection");
+                            $"<N>: Cancel and return to name selection\n");
 
                         user_input = Console.ReadKey();
 
@@ -496,6 +510,84 @@ namespace A03_OOP_JoshuaYDB
 
             return success_flag;
 
+        }
+
+        //method to remove a member from a list
+        internal Boolean Remove_Member(List<Member> list_of_members)
+        {
+            Boolean success_flag = false;
+            Boolean loop_control_flag = true;
+
+            while (loop_control_flag)
+            {
+                string? user_input;
+                ConsoleKeyInfo confirmation_input;
+
+                UserInterface.Clear_screen();
+                UserInterface.Display_message("Enter the Member ID of the Member you would like to delete.\n");
+                user_input = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(user_input))
+                {
+                    UserInterface.Display_error_message
+                        (
+                            "The Member ID must not be blank or contain any spaces.",
+                            "Press any key to continue..."
+                        );
+                    
+                    UserInterface.Display_message("Press <Y> to type a new Member ID or\nPress <X> to return to the main menu.");
+                    confirmation_input =  Console.ReadKey();
+                    switch (confirmation_input.Key)
+                    {
+                        case ConsoleKey.Y:
+                            //continue the loop, do nothing
+                            break;
+                        default:
+                            loop_control_flag = false;
+                            break;
+                    }
+                }
+                //if the entry is not null, check if a member with that ID exists
+                else
+                {
+                    //https://stackoverflow.com/questions/17264281/get-the-index-of-item-in-a-list-given-its-property showed me how to match a property value and find the index of that property's object within a collection
+                    //checks each member's member ID [member.Member_id] as a string (without dashes "N") against the user_input. if none match the input, returns -1
+                    int ix_for_removal = list_of_members.FindIndex(member => member.Member_id.ToString("N") == user_input);
+                    if (ix_for_removal != -1)
+                    {
+                        UserInterface.Clear_screen();
+                        UserInterface.Display_message
+                            (
+                                $"\n\n" +
+                                $"***ARE YOU SURE YOU WOULD LIKE TO DELETE THIS MEMBER?***\n\n"
+                            );
+                        UserInterface.Display_one_member(list_of_members[ix_for_removal]);
+                        UserInterface.Display_message
+                            (
+                                $"<Y>: Confirm and delete the member\n" +
+                                $"<N>: Cancel and return to the main menu\n"
+                            );
+
+                        confirmation_input = Console.ReadKey();
+                        switch (confirmation_input.Key)
+                        {
+                            case ConsoleKey.Y:
+                                UserInterface.Clear_screen();
+                                list_of_members.RemoveAt(ix_for_removal);
+                                success_flag = true;
+                                loop_control_flag = false;
+                                break;
+
+                            default:
+                                success_flag = false;
+                                loop_control_flag = false;
+                                break;
+                        }
+                    }
+                }
+            }
+
+            return success_flag;
         }
 
 

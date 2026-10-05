@@ -13,6 +13,14 @@ namespace A03_OOP_JoshuaYDB
             return;
         }
 
+        //overloaded method to display a member without age, only a member object as a parameter is required.
+        internal static void Display_one_member(Member member)
+        {
+            Console.WriteLine
+                ($"| {member.Member_id.ToString("N"),-32} | {member.Member_first_name,-15} | {member.Member_last_name,-15} | {member.Member_email,-25} | {member.Member_dob.ToString(),-12}|");
+            return;
+        }
+
 
         //Recycled helper functions below this point
 
