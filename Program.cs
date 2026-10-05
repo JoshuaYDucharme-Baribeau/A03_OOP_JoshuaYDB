@@ -5,7 +5,8 @@ namespace A03_OOP_JoshuaYDB
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Run initialization = new Run();
+            initialization.RunProgram();
         }
     }
 }

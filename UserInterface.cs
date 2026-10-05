@@ -10,6 +10,7 @@ namespace A03_OOP_JoshuaYDB
         {
             Console.WriteLine
                 ($"| {id,-12} | {fname,-15} | {lname,-15} | {email,-25} | {dob,-12} | {age,-3} |");
+            return;
         }
 
 
@@ -34,7 +35,7 @@ namespace A03_OOP_JoshuaYDB
                     "<L>ist all members\n" +
                     "<D>elete a member\n" +
                     "<S>ave all member data to a file\n" +
-                    "L<O>ad all members from a file" +
+                    "L<O>ad all members from a file\n" +
                     "E<X>it the program\n" +
                     "Please choose the operation you would like to perform:\n\n"
                 );
@@ -58,7 +59,7 @@ namespace A03_OOP_JoshuaYDB
         internal static void Clear_screen()
         {
             Console.Clear();
-            //no return needed for void return type
+            return;
         }
 
 
@@ -75,6 +76,7 @@ namespace A03_OOP_JoshuaYDB
         {
             Console.WriteLine(message_prompt);
             Console.ReadKey();
+            return;
         }
 
 
@@ -92,6 +94,23 @@ namespace A03_OOP_JoshuaYDB
         {
             Console.WriteLine("\n\n" + error_message);
             Block_program(message_prompt);
+            return;
+        }
+
+        /*
+         * METHOD       : Display_message
+         * 
+         * DESCRIPTION  : displays a regular message without blocking the program
+         * 
+         * PARAMETERS   : string message  : [OPTIONAL] A message that will be displayed. 
+         *
+         * 
+         * RETURNS      : NOTHING
+         */
+        internal static void Display_message(string message = "No message to display.") //default message for debugging
+        {
+            Console.WriteLine(message);
+            return;
         }
     }
 }
