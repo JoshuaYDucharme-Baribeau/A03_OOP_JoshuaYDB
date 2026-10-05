@@ -27,15 +27,18 @@ namespace A03_OOP_JoshuaYDB
                     case ConsoleKey.A:
                         
                         members.Add(new Member());
-                        //members[-1].member
-                        
-                        //how a member will be instantiated in a list
-                        //the next thing that should happen is a GUID is generated,
-                        //and the user is asked to fill in other details about the recently added member
-                        //those details are then passed as the arguments for Member() in the line below
-                        //members.Add(new Member()); //instantiate a new member with the passed details in the list
-                        
-                        
+                        //get the size of the list to find the last member
+                        int ix_last_member = (members.Count)-1;
+                        members[ix_last_member].Member_id = Create_ID();
+                        members[ix_last_member].Member_first_name = Get_First();
+                        members[ix_last_member].Member_last_name = Get_Last();
+                        members[ix_last_member].Member_email = Get_Email();
+                        members[ix_last_member].Member_dob = Get_DOB();
+
+                        UserInterface.Clear_screen();
+                        UserInterface.Display_message($"{members[ix_last_member].Member_first_name} {members[ix_last_member].Member_last_name} was successfully added to the club!");
+                        UserInterface.Block_program("Be sure to welcome them!\nPress any key to return to the menu...");
+
                         break;
 
                     //display data
