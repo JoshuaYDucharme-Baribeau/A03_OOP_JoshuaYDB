@@ -279,6 +279,7 @@ namespace A03_OOP_JoshuaYDB
                 //if parse successful
                 else if (DateOnly.TryParse(input, out dob))
                 {
+                    DateOnly.TryParse(input, out dob);
                     invalid_dob = false;
                 }
             }
