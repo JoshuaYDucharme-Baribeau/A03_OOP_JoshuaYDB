@@ -88,6 +88,7 @@ namespace A03_OOP_JoshuaYDB
 
                     case ConsoleKey.S:
                         //method to save members to file
+                        Get_valid_file_name(members);
                         break;
 
                     case ConsoleKey.O:
@@ -352,7 +353,7 @@ namespace A03_OOP_JoshuaYDB
             {
                 UserInterface.Clear_screen();
 
-               UserInterface.Display_message
+                UserInterface.Display_message
                     (
                         "Enter the name of the file to which you would like to save the list of members." +
                         "\nNB:Avoid use of invalid characters. Be sure to specify file extensions as needed:\n"
@@ -361,7 +362,7 @@ namespace A03_OOP_JoshuaYDB
 
                 //Preventing null or blank filenames. Regex might be preferable here if there were more specific requirements or file naming conventions to follow.
                 //Exceptions around filehandling will be handled in a different method
-                if (string.IsNullOrEmpty(file_name))
+                if (string.IsNullOrWhiteSpace(file_name))
                 {
                     UserInterface.Display_error_message
                         (
@@ -392,7 +393,7 @@ namespace A03_OOP_JoshuaYDB
                     {
                         UserInterface.Display_message
                             ($"A file named \"{file_name}\" already exists.\n\n" +
-                            $"***ARE YOU SURE YOU WOULD LIKE TO OVERWRITE IT?***" +
+                            $"***ARE YOU SURE YOU WOULD LIKE TO OVERWRITE IT?***\n" +
                             $"<Y>: Confirm and overwrite\n" +
                             $"<N>: Cancel and return to name selection");
 
