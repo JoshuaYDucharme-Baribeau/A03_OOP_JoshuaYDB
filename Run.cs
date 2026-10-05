@@ -26,6 +26,8 @@ namespace A03_OOP_JoshuaYDB
                     //add a member
                     case ConsoleKey.A:
                         
+                        members.Add(new Member());
+                        //members[-1].member
                         
                         //how a member will be instantiated in a list
                         //the next thing that should happen is a GUID is generated,
@@ -104,6 +106,8 @@ namespace A03_OOP_JoshuaYDB
             return 0;
         }
 
+
+        //____Methods that gather input for a new member____
 
         //create a Guid
         internal Guid Create_ID()
@@ -204,7 +208,7 @@ namespace A03_OOP_JoshuaYDB
                 {
                     UserInterface.Display_error_message
                         (
-                            "The email name may not be blank",
+                            "The email may not be blank",
                             "Press any key to try again..."
                         );
                 }
@@ -217,6 +221,42 @@ namespace A03_OOP_JoshuaYDB
             return email;
 
         }
+
+
+        //get the DOB of the new member
+        internal DateOnly Get_DOB()
+        {
+            Boolean invalid_dob = true;
+            string? input;
+            DateOnly dob = new DateOnly(1900, 01, 01);
+
+            while (invalid_dob)
+            {
+                UserInterface.Clear_screen();
+                UserInterface.Display_message
+                    (
+                        "**Adding new member (Step 4/4)**\n" +
+                        "Enter the Date of birth of the new member YYYY-MM-DD:\n"
+                    );
+                input = Console.ReadLine();
+                //if the date is not parsable
+                if (!DateOnly.TryParse(input, out dob))
+                {
+                    UserInterface.Display_error_message
+                        (
+                            "The date of birth entered was invalid.\nIt may not be blank and should be formated as YYYY-MM-DD.",
+                            "Press any key to try again..."
+                        );
+                }
+                //if parse successful
+                else if (DateOnly.TryParse(input, out dob))
+                {
+                    invalid_dob = false;
+                }
+            }
+            return dob;
+        }
+
 
 
 
