@@ -6,6 +6,12 @@ namespace A03_OOP_JoshuaYDB
     static internal class UserInterface
     {
 
+        internal static void Display_one_member(string id, string fname, string lname, string email, string dob, string age)
+        {
+            Console.WriteLine
+                ($"| {id,-12} | {fname,-15} | {lname,-15} | {email,-25} | {dob,-12} | {age,-3} |");
+        }
+
 
         //Recycled helper functions below this point
 
@@ -27,8 +33,8 @@ namespace A03_OOP_JoshuaYDB
                     "<A>dd a member\n" +
                     "<L>ist all members\n" +
                     "<D>elete a member\n" +
-                    "<S>ave member data to a file\n" +
-                    "L<O>ad members from a file" +
+                    "<S>ave all member data to a file\n" +
+                    "L<O>ad all members from a file" +
                     "E<X>it the program\n" +
                     "Please choose the operation you would like to perform:\n\n"
                 );
