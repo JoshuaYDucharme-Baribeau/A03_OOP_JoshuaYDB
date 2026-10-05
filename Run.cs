@@ -25,11 +25,15 @@ namespace A03_OOP_JoshuaYDB
                 {
                     //add a member
                     case ConsoleKey.A:
+                        
+                        
                         //how a member will be instantiated in a list
                         //the next thing that should happen is a GUID is generated,
                         //and the user is asked to fill in other details about the recently added member
                         //those details are then passed as the arguments for Member() in the line below
                         //members.Add(new Member()); //instantiate a new member with the passed details in the list
+                        
+                        
                         break;
 
                     //display data
@@ -99,5 +103,123 @@ namespace A03_OOP_JoshuaYDB
 
             return 0;
         }
+
+
+        //create a Guid
+        internal Guid Create_ID()
+        {
+            Guid unique_id = new Guid();
+            return unique_id;
+        }
+
+        //gather member first name
+        internal string Get_First()
+        {
+            Boolean invalid_name = true;
+            string first_name = "x";
+            string? input = null;
+            
+            while(invalid_name)
+            {
+                UserInterface.Clear_screen();
+                UserInterface.Display_message
+                    (
+                        "**Adding new member (Step 1/4)**\n" +
+                        "Enter the first name of the new member:\n"
+                    );
+                input = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(input))
+                {
+                    UserInterface.Display_error_message
+                        (
+                            "The first name may not be blank",
+                            "Press any key to try again..."
+                        );
+                }
+                else if(!String.IsNullOrWhiteSpace(input))
+                {
+                    first_name = input;
+                    invalid_name = false;
+                }
+            }
+            return first_name;
+            
+        }
+
+
+
+        //gather member last name
+        internal string Get_Last()
+        {
+            Boolean invalid_name = true;
+            string last_name = "x";
+            string? input = null;
+
+            while (invalid_name)
+            {
+                UserInterface.Clear_screen();
+                UserInterface.Display_message
+                    (
+                        "**Adding new member (Step 2/4)**\n" +
+                        "Enter the last name of the new member:\n"
+                    );
+                input = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(input))
+                {
+                    UserInterface.Display_error_message
+                        (
+                            "The last name may not be blank",
+                            "Press any key to try again..."
+                        );
+                }
+                else if(!String.IsNullOrWhiteSpace(input))
+                {
+                    last_name = input;
+                    invalid_name = false;
+                }
+            }
+            return last_name;
+
+        }
+
+
+        //gather member last name
+        internal string Get_Email()
+        {
+            Boolean invalid_email = true;
+            string? input;
+            string email = "x";
+
+            while (invalid_email)
+            {
+                UserInterface.Clear_screen();
+                UserInterface.Display_message
+                    (
+                        "**Adding new member (Step 3/4)**\n" +
+                        "Enter the email address of the new member:\n"
+                    );
+                input = Console.ReadLine();
+                //ideally, this would have its own email address validation, and more complex systems would require validation with a link
+                if (String.IsNullOrWhiteSpace(input))
+                {
+                    UserInterface.Display_error_message
+                        (
+                            "The email name may not be blank",
+                            "Press any key to try again..."
+                        );
+                }
+                else if (!String.IsNullOrWhiteSpace(input))
+                {
+                    email = input;
+                    invalid_email = false;
+                }
+            }
+            return email;
+
+        }
+
+
+
+
     }
 }

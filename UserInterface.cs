@@ -9,7 +9,7 @@ namespace A03_OOP_JoshuaYDB
         internal static void Display_one_member(string id, string fname, string lname, string email, string dob, string age)
         {
             Console.WriteLine
-                ($"| {id,-12} | {fname,-15} | {lname,-15} | {email,-25} | {dob,-12} | {age,-3} |");
+                ($"| {id,-32} | {fname,-15} | {lname,-15} | {email,-25} | {dob,-12} | {age,-3} |");
             return;
         }
 
