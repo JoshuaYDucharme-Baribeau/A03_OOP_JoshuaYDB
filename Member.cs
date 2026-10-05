@@ -12,13 +12,13 @@ namespace A03_OOP_JoshuaYDB
         private string? member_email;
         private DateOnly member_dob;
 
-        //constructor with no params, will consider making it return an error message
+        //constructor with no params,
         public Member()
         {
 
         }
 
-        //constructor
+        //constructor if a member needed to created this way
         internal Member(Guid an_id, string a_first_name, string a_last_name, string an_email, DateOnly a_dob)
         {
             member_id = an_id;
@@ -28,7 +28,7 @@ namespace A03_OOP_JoshuaYDB
             member_dob = a_dob;
         }
 
-        //properties establisshed below
+        //properties established below
         public Guid Member_id
         {
             get

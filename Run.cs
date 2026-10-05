@@ -1,4 +1,6 @@
 ﻿
+using System.Xml.Linq;
+
 namespace A03_OOP_JoshuaYDB
 {
     internal class Run
@@ -323,6 +325,176 @@ namespace A03_OOP_JoshuaYDB
 
             }
             return age;
+        }
+
+
+
+
+        //____File handling methods below____
+        //ideally, these could be moved to separate class
+
+        /*
+         * METHOD       : Get_valid_file_name
+         * 
+         * DESCRIPTION  : Asks the user to input a file name (or path and file name) to which the data should be saved
+         * 
+         * PARAMETERS   : List<Member> list_of_members: the list of objects that holds all the members
+         * 
+         * RETURNS      : NOTHING
+         */
+        internal void Get_valid_file_name(List<Member> list_of_members)
+        {
+            ConsoleKeyInfo user_input;
+            Boolean invalid_file_name = true; //flag for a while loop
+            string? file_name; //? allows null in order for validation to be done by the code instead of an exception or warning being thrown
+
+            while (invalid_file_name)
+            {
+                UserInterface.Clear_screen();
+
+               UserInterface.Display_message
+                    (
+                        "Enter the name of the file to which you would like to save the list of members." +
+                        "\nNB:Avoid use of invalid characters. Be sure to specify file extensions as needed:\n"
+                    );
+                file_name = Console.ReadLine();
+
+                //Preventing null or blank filenames. Regex might be preferable here if there were more specific requirements or file naming conventions to follow.
+                //Exceptions around filehandling will be handled in a different method
+                if (string.IsNullOrEmpty(file_name))
+                {
+                    UserInterface.Display_error_message
+                        (
+                            "The file name may not be blank.",
+                            "Press any key to enter a different file name."
+                        );
+                }
+                //else, i.e. if filename is not blank or null, call the method to open and write to the file
+                else
+                {
+                    //add .txt to the file extension if the extension is not .txt
+                    if (file_name.Contains("."))
+                    {
+                        //find the index of the las period
+                        int ix_last_period = file_name.LastIndexOf(".");
+                        //replace the extension with .txt, but only the last extension (note.tar.gz becomes note.tar.txt)
+                        file_name = file_name.Substring(0, ix_last_period) + ".txt";
+
+                    }
+                    //if no existing extension, add .txt
+                    else
+                    {
+                        file_name = file_name + ".txt";
+                    }
+
+                    //confirm overwrite if file already exists
+                    if (File.Exists(file_name))
+                    {
+                        UserInterface.Display_message
+                            ($"A file named \"{file_name}\" already exists.\n\n" +
+                            $"***ARE YOU SURE YOU WOULD LIKE TO OVERWRITE IT?***" +
+                            $"<Y>: Confirm and overwrite\n" +
+                            $"<N>: Cancel and return to name selection");
+
+                        user_input = Console.ReadKey();
+
+                        if (user_input.Key == ConsoleKey.Y)
+                        {
+                            //stay on track
+                            UserInterface.Clear_screen();
+                        }
+                        // i.e. if input is not Y or y
+                        else
+                        {
+                            //Re-loop the while
+                            continue;
+                        }
+                    }
+                    //if file doesn't already exist
+                    else
+                    {
+                        //do nothing, stay on track
+                    }
+
+
+                    //if the file saving is successful
+                    if (Save_Members_List(file_name, list_of_members))
+                    {
+                        //exit the loop by changing the flag
+                        invalid_file_name = false;
+
+                        UserInterface.Display_message($"\nData saved successfully to {file_name}.");
+                        UserInterface.Block_program("Press any key to continue...");
+                    }
+                    //else, i.e. if the file saving is unsuccessful
+                    else
+                    {
+                        //if the saving is unsuccessful, error handling and messages will be displayed by Save_Members_List()
+                        break;
+                    }
+
+                }
+
+            }
+
+        }
+
+        //method to save all members to a file
+        /*
+         * METHOD       : Save_Members_List
+         * 
+         * DESCRIPTION  : opens the file streams and tries to create/write or overwrite the specified file
+         *              : Handles generic exceptions in case of failure.
+         * 
+         * PARAMETERS   : string file_name: The name of the file that the list of members will be saved to
+         *              : List<Member> file_name: [shadowed param name] the list of objects that holds all the members
+         * 
+         * RETURNS      : Boolean success_flag: a true/false flag to indicate if the operation was successful
+         */
+        internal Boolean Save_Members_List(string file_name, List<Member> list_of_members)
+        {
+            Boolean success_flag;
+
+            //specifiying the namespace for clarity and evaluation by the instructor
+            FileStream my_file_stream;
+            StreamWriter my_stream_writer;
+
+            //try to open and write
+            try
+            {
+                //open streams
+                my_file_stream = File.OpenWrite(file_name);
+                my_stream_writer = new StreamWriter(my_file_stream);
+
+                //write each element of the list to the file, line by line
+                foreach (Member member in list_of_members)
+                {
+                    my_stream_writer.WriteLine($"{member.Member_id.ToString("N")}|{member.Member_first_name}|{member.Member_last_name}|{member.Member_email}|{member.Member_dob.ToString()}");
+                }
+
+                //close streams when finished
+                my_stream_writer.Close();
+                my_file_stream.Close();
+                success_flag = true; //flag is true to indicate a successful save
+            }
+            //catch all exceptions
+            catch (Exception ex)
+            {
+                //ex itself passes a very detailed error message. Opting for ex.Message, which passes a much shorter error message.
+                UserInterface.Display_error_message
+                (
+                    "An error has occurred while saving the data to the file. The data was not saved.\n" + "Error information: \"" + ex.Message + "\"",
+                    "Press any key to return to the menu..."
+                );
+                success_flag = false; //flag is false to indicate an error occurred
+            }
+            finally
+            {
+                UserInterface.Clear_screen();
+            }
+
+            return success_flag;
+
         }
 
 
