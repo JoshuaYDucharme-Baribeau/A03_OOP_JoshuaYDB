@@ -72,12 +72,11 @@ namespace A03_OOP_JoshuaYDB
                                     "Press any key to return to the menu..."
                                 );
                         }
-                        UserInterface.Block_program();
                         break;
 
                     //remove a member
                     case ConsoleKey.D:
-
+                        UserInterface.Clear_screen();
                         //if there are any strings in the list to remove
                         if (members.Count > 0)
                         {
@@ -86,6 +85,10 @@ namespace A03_OOP_JoshuaYDB
                                 UserInterface.Clear_screen();
                                 UserInterface.Display_message("Deletion successful.");
                                 UserInterface.Block_program();
+                            }
+                            else
+                            {
+                                //deletion not successful, break and reloop
                             }
                         }
                         //if there are no strings in the list to remove
@@ -529,12 +532,8 @@ namespace A03_OOP_JoshuaYDB
 
                 if (string.IsNullOrWhiteSpace(user_input))
                 {
-                    UserInterface.Display_error_message
-                        (
-                            "The Member ID must not be blank or contain any spaces.",
-                            "Press any key to continue..."
-                        );
-                    
+                    UserInterface.Clear_screen();
+                    UserInterface.Display_message("The Member ID must not be blank or contain any spaces.");
                     UserInterface.Display_message("Press <Y> to type a new Member ID or\nPress <X> to return to the main menu.");
                     confirmation_input =  Console.ReadKey();
                     switch (confirmation_input.Key)
@@ -558,13 +557,12 @@ namespace A03_OOP_JoshuaYDB
                         UserInterface.Clear_screen();
                         UserInterface.Display_message
                             (
-                                $"\n\n" +
                                 $"***ARE YOU SURE YOU WOULD LIKE TO DELETE THIS MEMBER?***\n\n"
                             );
                         UserInterface.Display_one_member(list_of_members[ix_for_removal]);
                         UserInterface.Display_message
                             (
-                                $"<Y>: Confirm and delete the member\n" +
+                                $"\n<Y>: Confirm and delete the member\n" +
                                 $"<N>: Cancel and return to the main menu\n"
                             );
 
@@ -578,6 +576,24 @@ namespace A03_OOP_JoshuaYDB
                                 loop_control_flag = false;
                                 break;
 
+                            default:
+                                success_flag = false;
+                                loop_control_flag = false;
+                                break;
+                        }
+                    }
+                    //if there is no matchin id
+                    else
+                    {
+                        UserInterface.Clear_screen();
+                        UserInterface.Display_message($"There is no member with the ID \"{user_input}\"\n");
+                        UserInterface.Display_message("Press <Y> to type a new Member ID or\nPress <X> to return to the main menu.");
+                        confirmation_input = Console.ReadKey();
+                        switch (confirmation_input.Key)
+                        {
+                            case ConsoleKey.Y:
+                                //continue the loop, do nothing
+                                break;
                             default:
                                 success_flag = false;
                                 loop_control_flag = false;
