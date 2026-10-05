@@ -27,8 +27,9 @@ namespace A03_OOP_JoshuaYDB
                     case ConsoleKey.A:
                         
                         members.Add(new Member());
-                        //get the size of the list to find the last member
+                        //get the size of the list to find the index of the last member in the list
                         int ix_last_member = (members.Count)-1;
+
                         members[ix_last_member].Member_id = Create_ID();
                         members[ix_last_member].Member_first_name = Get_First();
                         members[ix_last_member].Member_last_name = Get_Last();
@@ -41,11 +42,35 @@ namespace A03_OOP_JoshuaYDB
 
                         break;
 
-                    //display data
+                    //display all members
                     case ConsoleKey.L:
                         //method to display all members will run a loop through the list and
                         //call Display_one_member() each time iteration
-                                //UserInterface.Display_one_member();
+                        //UserInterface.Display_one_member();
+                        UserInterface.Clear_screen();
+                        if(members.Count > 0)
+                        {
+                            foreach (Member member in members)
+                            {
+                                UserInterface.Display_one_member
+                                    (member.Member_id.ToString("N"),
+                                    member.Member_first_name,
+                                    member.Member_last_name,
+                                    member.Member_email,
+                                    member.Member_dob.ToString(),
+                                    (Get_Age(member)).ToString());
+                                    //could add a delay here to make it print out line by line like a movie
+                            }
+                        }
+                        else
+                        {
+                            UserInterface.Display_error_message
+                                (
+                                    "There are no members to display.",
+                                    "Press any key to return to the menu..."
+                                );
+                        }
+                        UserInterface.Block_program();
                         break;
 
                     //remove a member
@@ -115,7 +140,7 @@ namespace A03_OOP_JoshuaYDB
         //create a Guid
         internal Guid Create_ID()
         {
-            Guid unique_id = new Guid();
+            Guid unique_id = Guid.NewGuid();
             return unique_id;
         }
 
@@ -260,7 +285,44 @@ namespace A03_OOP_JoshuaYDB
             return dob;
         }
 
+        //https://learn.microsoft.com/en-us/dotnet/api/system.datetime.now?view=net-10.0 DateTime and DateTime.Now structs
+        //https://learn.microsoft.com/en-us/dotnet/standard/datetime/how-to-use-dateonly-timeonly DateOnly structs
+        //https://learn.microsoft.com/en-us/dotnet/standard/datetime/how-to-use-dateonly-timeonly#add-or-subtract-days-months-years add or subtract dateOnly structs
+        internal int Get_Age(Member member)
+        {
+            //creates new dateTime struct
+            DateTime today = new DateTime();
+            //gets the current date and time
+            today = DateTime.Now;
 
+            //converts the birthday to a dateTime, assumed at midnight (MinValue)
+            DateTime mem_bday = member.Member_dob.ToDateTime(TimeOnly.MinValue);
+
+            //access the years and subtract them
+            int age;
+            age = today.Year - mem_bday.Year;
+
+
+            //if the current date is before the birthmonth
+            if (today.Month < mem_bday.Month)
+            {
+                //they haven't had they're bday yet
+                age -= 1;
+
+            }
+            //if the current date is the birthmonth
+            else if (today.Month < mem_bday.Month)
+            {
+                //if the current date is before the day of the birthdate
+                if (today.Day < mem_bday.Day)
+                {
+                    //they haven't had they're bday yet
+                    age -= 1;
+                }
+
+            }
+            return age;
+        }
 
 
 
