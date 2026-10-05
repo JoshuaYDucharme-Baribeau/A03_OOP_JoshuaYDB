@@ -1,4 +1,5 @@
-﻿namespace A03_OOP_JoshuaYDB
+﻿
+namespace A03_OOP_JoshuaYDB
 {
     internal class Program
     {
