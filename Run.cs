@@ -111,6 +111,7 @@ namespace A03_OOP_JoshuaYDB
 
                     case ConsoleKey.O:
                         //method to load members from file
+                        Find_Loadable_File(members);
                         break;
 
                     case ConsoleKey.X:
@@ -143,14 +144,6 @@ namespace A03_OOP_JoshuaYDB
                 }
 
             }
-
-
-            //add member method will simply instantiate a member and add the member to the list
-            //I can set default params in the mean time while 
-
-            //method to display all members will run a loop through the list and
-            //call Display_one_member() each time iteration
-
 
             return 0;
         }
@@ -679,10 +672,9 @@ namespace A03_OOP_JoshuaYDB
 
         internal void Find_Loadable_File(List<Member> list_of_members)
         {
-            ConsoleKeyInfo user_input;
             ConsoleKeyInfo confirmation_input;
             Boolean invalid_file_name = true; //flag for a while loop
-            string file_name; //? allows null in order for validation to be done by the code instead of an exception or warning being thrown
+            string? file_name; //? allows null in order for validation to be done by the code instead of an exception or warning being thrown
 
             while (invalid_file_name)
             {
