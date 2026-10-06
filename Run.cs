@@ -64,6 +64,7 @@ namespace A03_OOP_JoshuaYDB
                                     (Get_Age(member)).ToString());
                                     //could add a delay here to make it print out line by line like a movie
                             }
+                            UserInterface.Block_program();
                         }
                         else
                         {
@@ -622,6 +623,7 @@ namespace A03_OOP_JoshuaYDB
                 DateOnly dob;
 
                 //parse the member data, line by line
+                list_of_members.Clear();
                 while ((line = my_stream_reader.ReadLine()) != null) //until the end of the file
                 {
 
@@ -738,7 +740,7 @@ namespace A03_OOP_JoshuaYDB
                             //exit the loop by changing the flag
                             invalid_file_name = false;
 
-                            UserInterface.Display_message($"\nData saved successfully to {file_name}.");
+                            UserInterface.Display_message($"\nLoaded members successfully from {file_name}.");
                             UserInterface.Block_program("Press any key to continue...");
                         }
                         //else, i.e. if the file loading is unsuccessful
