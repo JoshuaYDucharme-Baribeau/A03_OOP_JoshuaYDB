@@ -1,4 +1,9 @@
-﻿
+﻿/*
+ * CLASS        : Member
+ * 
+ * DESCRIPTION  : Class which holds the constructors and properties of a member (like of a club), whom has properties as defined within
+ * 
+ */
 namespace A03_OOP_JoshuaYDB
 {
     internal class Member
@@ -12,13 +17,13 @@ namespace A03_OOP_JoshuaYDB
         private string? member_email;
         private DateOnly member_dob;
 
-        //constructor with no params,
+        //constructor with no params
         public Member()
         {
 
         }
 
-        //constructor if a member needed to created this way
+        //constructor if a member needed to created this way. NOT USED IN THIS ASSIGMENT
         internal Member(Guid an_id, string a_first_name, string a_last_name, string an_email, DateOnly a_dob)
         {
             member_id = an_id;
@@ -28,7 +33,7 @@ namespace A03_OOP_JoshuaYDB
             member_dob = a_dob;
         }
 
-        //properties established below
+        //properties of a member established below
         public Guid Member_id
         {
             get

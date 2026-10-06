@@ -1,12 +1,19 @@
-﻿
-using System.Linq.Expressions;
-using System.Xml.Linq;
-
+﻿/*
+ * CLASS        : Run
+ * 
+ * DESCRIPTION  : This class contains the heavy logic for the program
+ *      it has the methods required to add, delete and display a list of the club's members.
+ *      It can also save that list to a file, or load a list of members from a file.
+ *      
+ *      At this time, this class also holds the filehandling and parsing logic required
+ *      Ideally, I would move this to a separate class, but it would take some time to separate 
+ *      them safely
+ * 
+ */
 namespace A03_OOP_JoshuaYDB
 {
     internal class Run
     {
-
         public int RunProgram()
         {
 
@@ -150,16 +157,33 @@ namespace A03_OOP_JoshuaYDB
         }
 
 
-        //____Methods that gather input for a new member____
+        //____Methods that gather data/input for a new member____
 
-        //create a Guid
+        /*
+         * METHOD       : Create_ID
+         * 
+         * DESCRIPTION  : Creates a unique ID of many hex digits statistically unlikely to be duplicated
+         * 
+         * PARAMETERS   : NONE
+         * 
+         * RETURNS      : Guid unique_id: a unique id
+         */
         internal Guid Create_ID()
         {
             Guid unique_id = Guid.NewGuid();
             return unique_id;
         }
 
-        //gather member first name
+
+        /*
+         * METHOD       : Get_First
+         * 
+         * DESCRIPTION  : gets input from the user for a first name of a new member
+         * 
+         * PARAMETERS   : NONE
+         * 
+         * RETURNS      : string first_name : a first name
+         */
         internal string Get_First()
         {
             Boolean invalid_name = true;
@@ -194,8 +218,15 @@ namespace A03_OOP_JoshuaYDB
         }
 
 
-
-        //gather member last name
+        /*
+         * METHOD       : Get_Last
+         * 
+         * DESCRIPTION  : gets input from the user for a Last name of a new member
+         * 
+         * PARAMETERS   : NONE
+         * 
+         * RETURNS      : string last_name: a last name
+         */
         internal string Get_Last()
         {
             Boolean invalid_name = true;
@@ -230,7 +261,15 @@ namespace A03_OOP_JoshuaYDB
         }
 
 
-        //gather member last name
+        /*
+         * METHOD       : Get_Email
+         * 
+         * DESCRIPTION  : gets input from the user for a an email of a new member
+         * 
+         * PARAMETERS   : NONE
+         * 
+         * RETURNS      : string email: an email address
+         */
         internal string Get_Email()
         {
             Boolean invalid_email = true;
@@ -266,6 +305,16 @@ namespace A03_OOP_JoshuaYDB
         }
 
 
+
+        /*
+         * METHOD       : Get_DOB
+         * 
+         * DESCRIPTION  : gets input from the user for the date of birth of a new member
+         * 
+         * PARAMETERS   : NONE
+         * 
+         * RETURNS      : DateOnly dob: a date of birth
+         */
         //get the DOB of the new member
         internal DateOnly Get_DOB()
         {
@@ -301,6 +350,17 @@ namespace A03_OOP_JoshuaYDB
             return dob;
         }
 
+
+        /*
+         * METHOD       : Get_Age
+         * 
+         * DESCRIPTION  : Helper method that calculates a member's age based on their DOB and returns it as an int
+         * 
+         * PARAMETERS   : Member member: an object "Member" from the Member class, which is a person in the club
+         * 
+         * RETURNS      : int age: the member's age
+         */
+        // sources used
         //https://learn.microsoft.com/en-us/dotnet/api/system.datetime.now?view=net-10.0 DateTime and DateTime.Now structs
         //https://learn.microsoft.com/en-us/dotnet/standard/datetime/how-to-use-dateonly-timeonly DateOnly structs
         //https://learn.microsoft.com/en-us/dotnet/standard/datetime/how-to-use-dateonly-timeonly#add-or-subtract-days-months-years add or subtract dateOnly structs
@@ -346,10 +406,12 @@ namespace A03_OOP_JoshuaYDB
         //____File handling methods below____
         //ideally, these could be moved to separate class
 
+
+
         /*
          * METHOD       : Get_valid_file_name
          * 
-         * DESCRIPTION  : Asks the user to input a file name (or path and file name) to which the data should be saved
+         * DESCRIPTION  : Asks the user to input a file name (or path and file name) to which the list of members should be saved (parsable)
          * 
          * PARAMETERS   : List<Member> list_of_members: the list of objects that holds all the members
          * 
@@ -451,18 +513,18 @@ namespace A03_OOP_JoshuaYDB
                 }
 
             }
-
+            return;
         }
 
-        //method to save all members to a file
+
         /*
          * METHOD       : Save_Members_List
          * 
-         * DESCRIPTION  : opens the file streams and tries to create/write or overwrite the specified file
+         * DESCRIPTION  : opens the file streams and tries to create or overwrite and then write the list to the specified file
          *              : Handles generic exceptions in case of failure.
          * 
          * PARAMETERS   : string file_name: The name of the file that the list of members will be saved to
-         *              : List<Member> file_name: [shadowed param name] the list of objects that holds all the members
+         *              : List<Member> list_of_members: [shadowed param name] the list of objects that holds all the members
          * 
          * RETURNS      : Boolean success_flag: a true/false flag to indicate if the operation was successful
          */
@@ -511,7 +573,16 @@ namespace A03_OOP_JoshuaYDB
 
         }
 
-        //method to remove a member from a list
+
+        /*
+         * METHOD       : Remove_Member
+         * 
+         * DESCRIPTION  : Method to remove a member from the specified list
+         * 
+         * PARAMETERS   : List<Member> list_of_members: the list of objects that holds each of the members
+         * 
+         * RETURNS      : Boolean success_flag: a true/false flag to indicate if the operation was successful
+         */
         internal Boolean Remove_Member(List<Member> list_of_members)
         {
             Boolean success_flag = false;
@@ -602,7 +673,19 @@ namespace A03_OOP_JoshuaYDB
             return success_flag;
         }
 
-        //load data from a file and overwrite the existing member data
+
+
+        /*
+         * METHOD       : Load_From_File
+         * 
+         * DESCRIPTION  : opens the file streams and tries to parse and load a list of members from the file
+         *              : OVERWRITES EXISTING MEMBER DATA
+         * 
+         * PARAMETERS   : string file_name: The name of the file that the list of members will be loaded from
+         *              : List<Member> list_of_members: the list of objects that holds all the members
+         * 
+         * RETURNS      : Boolean success_flag: a true/false flag to indicate if the operation was successful
+         */
         internal Boolean Load_From_File(string file_name, List<Member> list_of_members)
         {
             Boolean success_flag;
@@ -671,7 +754,16 @@ namespace A03_OOP_JoshuaYDB
         }
 
 
-
+        /*
+         * METHOD       : Find_Loadable_File
+         * 
+         * DESCRIPTION  : Asks the user to input a file name (or path and file name) from which the list of members will be loaded
+         *              : EXISTING MEMBERS WILL BE OVERWRITTEN
+         * 
+         * PARAMETERS   : List<Member> list_of_members: the list of objects that holds all the members
+         * 
+         * RETURNS      : NOTHING
+         */
         internal void Find_Loadable_File(List<Member> list_of_members)
         {
             ConsoleKeyInfo confirmation_input;
@@ -777,7 +869,7 @@ namespace A03_OOP_JoshuaYDB
                 }
             
             }
-
+            return;
         }
 
 

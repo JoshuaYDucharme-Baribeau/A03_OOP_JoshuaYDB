@@ -1,4 +1,9 @@
-﻿
+﻿/*
+ * CLASS        : UserInterface
+ * 
+ * DESCRIPTION  : Class of helper methods solely for controling the user interface
+ * 
+ */
 namespace A03_OOP_JoshuaYDB
 {
     //making this class static because it shouldn't manipulate anything.
@@ -6,6 +11,17 @@ namespace A03_OOP_JoshuaYDB
     static internal class UserInterface
     {
 
+
+        /*
+         * METHOD       : Display_one_member [OVERLOADED: (string id, string fname, string lname, string email, string dob, string age)]
+         * 
+         * DESCRIPTION  : displays the properties of a given member in a formatted line of strings 
+         *              : NOT USED TO SAVE IN A PARSABLE FORMAT
+         * 
+         * PARAMETERS   : string id, string fname, string lname, string email, string dob, string age : of a member
+         * 
+         * RETURNS      : NOTHING
+         */
         internal static void Display_one_member(string id, string fname, string lname, string email, string dob, string age)
         {
             Console.WriteLine
@@ -13,6 +29,17 @@ namespace A03_OOP_JoshuaYDB
             return;
         }
 
+
+        /*
+         * METHOD       : Display_one_member [OVERLOADED: (Member member)]
+         * 
+         * DESCRIPTION  : displays the properties of a given member in a formatted line of strings. DOES NOT SHOW AGE
+         *              : NOT USED TO SAVE IN A PARSABLE FORMAT
+         * 
+         * PARAMETERS   : Member member: a given Member object (mmember of the club)
+         * 
+         * RETURNS      : NOTHING
+         */
         //overloaded method to display a member without age, only a member object as a parameter is required.
         internal static void Display_one_member(Member member)
         {
