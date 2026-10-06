@@ -114,7 +114,18 @@ namespace A03_OOP_JoshuaYDB
 
                     case ConsoleKey.S:
                         //method to save members to file
-                        Get_valid_file_name(members);
+                        if (members.Count > 0)
+                        {
+                            Get_valid_file_name(members);
+                        }
+                        else
+                        {
+                            UserInterface.Display_error_message
+                            (
+                            "There are no members to save to a file. Please add a member before trying to save the list to a file.",
+                            "Press any key to return to the menu..."
+                            );
+                        }
                         break;
 
                     case ConsoleKey.O:
