@@ -682,7 +682,7 @@ namespace A03_OOP_JoshuaYDB
 
                 UserInterface.Display_message
                     (
-                        "Enter the name of the file from whic to load a list of members." +
+                        "Enter the name of the file from which to load a list of members." +
                         "\nNB:Be sure to specify file paths or extensions as needed:\n"
                     );
                 file_name = Console.ReadLine();
@@ -697,39 +697,62 @@ namespace A03_OOP_JoshuaYDB
                             "Press any key to enter a different file name."
                         );
                 }
-                //filename is not blank
+                //if filename is not blank
                 else
-                {
-                    //confirm overwrite if member data already exists
-
-                    //if there are members
-                    if (list_of_members.Count > 0)
+                { 
+                    if (File.Exists(file_name)) 
                     {
-                        UserInterface.Display_message
-                            (
-                                $"Member data currently already exists. You are about to overwite this with data from \"{file_name}\".\n\n" +
-                                $"***ARE YOU SURE YOU WOULD LIKE TO OVERWRITE {list_of_members.Count} EXISTING MEMBERS?***\n" +
-                                $"<Y>: Confirm and overwrite\n" +
-                                $"<N>: Cancel and return to the main menu\n"
-                            );
-
-                        confirmation_input = Console.ReadKey();
-                        if (confirmation_input.Key == ConsoleKey.Y)
+                        if (list_of_members.Count > 0)
                         {
-                            //stay on track to overwrite the data
-                            UserInterface.Clear_screen();
+                            UserInterface.Display_message
+                                (
+                                    $"Member data currently already exists. You are about to overwite this with data from \"{file_name}\".\n\n" +
+                                    $"***ARE YOU SURE YOU WOULD LIKE TO OVERWRITE {list_of_members.Count} EXISTING MEMBERS?***\n" +
+                                    $"<Y>: Confirm and overwrite\n" +
+                                    $"<N>: Cancel and return to the main menu\n"
+                                );
+
+                            confirmation_input = Console.ReadKey();
+                            if (confirmation_input.Key == ConsoleKey.Y)
+                            {
+                                //stay on track to overwrite the data
+                                UserInterface.Clear_screen();
+                            }
+                            // i.e. if input is not Y or y
+                            else
+                            {
+                                //get out of the while loop! (skip all remaining code in the while loop
+                                invalid_file_name = false;
+                                continue;
+                            }
                         }
-                        // i.e. if input is not Y or y
+                        //if there are no members already,
                         else
                         {
-                            //get out of the while loop! (skip all remaining code in the while loop
+                            //stay on track to try and load data
+                        }
+
+                        //if the file loading is successful
+                        if (Load_From_File(file_name, list_of_members))
+                        {
+                            //exit the loop by changing the flag
                             invalid_file_name = false;
+
+                            UserInterface.Display_message($"\nData saved successfully to {file_name}.");
+                            UserInterface.Block_program("Press any key to continue...");
+                        }
+                        //else, i.e. if the file loading is unsuccessful
+                        else
+                        {
+                            //if the loading is unsuccessful, error handling and messages will be displayed by Load_From_File()
+                            //return to the main menu
+                            invalid_file_name=false; //exit the loop
                             continue;
                         }
                     }
-                    //if file doesn't exist, can't load the data
                     else
                     {
+                        //if file doesn't exist, can't load the data
                         UserInterface.Clear_screen();
                         UserInterface.Display_message($"Could not find the file \"{file_name}\". Check the file path and\n");
                         UserInterface.Display_message("Press <Y> to try a different file name or\nPress <X> to return to the main menu.");
@@ -737,33 +760,20 @@ namespace A03_OOP_JoshuaYDB
                         confirmation_input = Console.ReadKey();
                         if(confirmation_input.Key == ConsoleKey.Y)
                         {
-                            //stay in and finish the loop, i.e. do nothing
+                            //reloop without trying to load the file (it doesn't exist)
+                            invalid_file_name = true;
+                            continue;
                         }
                         else
                         {
                             invalid_file_name = false;
                             continue;
                         }
-                    }
 
-                    //if the file loading is successful
-                    if (Load_From_File(file_name, list_of_members))
-                    {
-                        //exit the loop by changing the flag
-                        invalid_file_name = false;
+                    }                   
 
-                        UserInterface.Display_message($"\nData saved successfully to {file_name}.");
-                        UserInterface.Block_program("Press any key to continue...");
-                    }
-                    //else, i.e. if the file saving is unsuccessful
-                    else
-                    {
-                        //if the saving is unsuccessful, error handling and messages will be displayed by Load_From_File()
-                        //return to the main menu
-                        invalid_file_name=false; //exit the loop
-                        break;
-                    }
                 }
+            
             }
 
         }
