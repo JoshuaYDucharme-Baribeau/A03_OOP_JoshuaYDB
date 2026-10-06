@@ -1,4 +1,5 @@
 ﻿
+using System.Linq.Expressions;
 using System.Xml.Linq;
 
 namespace A03_OOP_JoshuaYDB
@@ -448,6 +449,8 @@ namespace A03_OOP_JoshuaYDB
                     else
                     {
                         //if the saving is unsuccessful, error handling and messages will be displayed by Save_Members_List()
+                        //return to the main menu
+                        invalid_file_name = false; //exit the loop
                         break;
                     }
 
@@ -473,7 +476,6 @@ namespace A03_OOP_JoshuaYDB
         {
             Boolean success_flag;
 
-            //specifiying the namespace for clarity and evaluation by the instructor
             FileStream my_file_stream;
             StreamWriter my_stream_writer;
 
@@ -582,7 +584,7 @@ namespace A03_OOP_JoshuaYDB
                                 break;
                         }
                     }
-                    //if there is no matchin id
+                    //if there is no matching id
                     else
                     {
                         UserInterface.Clear_screen();
@@ -604,6 +606,174 @@ namespace A03_OOP_JoshuaYDB
             }
 
             return success_flag;
+        }
+
+        //load data from a file and overwrite the existing member data
+        internal Boolean Load_From_File(string file_name, List<Member> list_of_members)
+        {
+            Boolean success_flag;
+
+            FileStream my_file_stream;
+            StreamReader my_stream_reader;
+
+            //try to open and parse
+            try
+            {
+                //Adapted code from this query: https://stackoverflow.com/questions/858756/how-to-parse-a-text-file-with-c-sharp
+                //open streams
+                my_file_stream = File.OpenRead(file_name);
+                my_stream_reader = new StreamReader(my_file_stream);
+
+                string? line; //a given line in the file
+                Guid id;
+                DateOnly dob;
+
+                //parse the member data, line by line
+                while ((line = my_stream_reader.ReadLine()) != null) //until the end of the file
+                {
+
+                    //separate the entire line of data into strings separated by '|' pipes (the streamreader already checks for line endings above)
+                    string[] info_blocks = line.Split('|');
+
+                    //now that we have the line's (ie.e member's) properties as strings in an array, we can convert them and add them to the list
+                    Guid.TryParse(info_blocks[0], out id); //1st bloxk is an id, needs to be parsed
+                    DateOnly.TryParse(info_blocks[4], out dob); //5th block is a DOB, needs to be parsed
+
+                    //add the new member
+                    list_of_members.Add(new Member());
+                    //get the latest member index
+                    int ix_lastmem = list_of_members.Count - 1;
+
+                    list_of_members[ix_lastmem].Member_id = id;
+                    list_of_members[ix_lastmem].Member_first_name = info_blocks[1];
+                    list_of_members[ix_lastmem].Member_last_name = info_blocks[2];
+                    list_of_members[ix_lastmem].Member_email = info_blocks[3];
+                    list_of_members[ix_lastmem].Member_dob = dob;
+                }
+
+                //close streams when finished
+                my_stream_reader.Close();
+                my_file_stream.Close();
+                success_flag = true; //flag is true to indicate a successful save
+            }
+            //catch all exceptions
+            catch (Exception ex)
+            {
+                //ex itself passes a very detailed error message. Opting for ex.Message, which passes a much shorter error message.
+                UserInterface.Display_error_message
+                (
+                    "An error has occurred while loading the data from the file. The data was not loaded.\n" + "Error information: \"" + ex.Message + "\"",
+                    "Press any key to return to the menu..."
+                );
+                success_flag = false; //flag is false to indicate an error occurred
+            }
+            finally
+            {
+                UserInterface.Clear_screen();
+            }
+
+            return success_flag;
+        }
+
+
+
+        internal void Find_Loadable_File(List<Member> list_of_members)
+        {
+            ConsoleKeyInfo user_input;
+            ConsoleKeyInfo confirmation_input;
+            Boolean invalid_file_name = true; //flag for a while loop
+            string file_name; //? allows null in order for validation to be done by the code instead of an exception or warning being thrown
+
+            while (invalid_file_name)
+            {
+                UserInterface.Clear_screen();
+
+                UserInterface.Display_message
+                    (
+                        "Enter the name of the file from whic to load a list of members." +
+                        "\nNB:Be sure to specify file paths or extensions as needed:\n"
+                    );
+                file_name = Console.ReadLine();
+
+                //Preventing null or blank filenames.
+                //Exceptions around filehandling will be handled in a different method
+                if (string.IsNullOrWhiteSpace(file_name))
+                {
+                    UserInterface.Display_error_message
+                        (
+                            "The file name may not be blank.",
+                            "Press any key to enter a different file name."
+                        );
+                }
+                //filename is not blank
+                else
+                {
+                    //confirm overwrite if member data already exists
+
+                    //if there are members
+                    if (list_of_members.Count > 0)
+                    {
+                        UserInterface.Display_message
+                            (
+                                $"Member data currently already exists. You are about to overwite this with data from \"{file_name}\".\n\n" +
+                                $"***ARE YOU SURE YOU WOULD LIKE TO OVERWRITE {list_of_members.Count} EXISTING MEMBERS?***\n" +
+                                $"<Y>: Confirm and overwrite\n" +
+                                $"<N>: Cancel and return to the main menu\n"
+                            );
+
+                        confirmation_input = Console.ReadKey();
+                        if (confirmation_input.Key == ConsoleKey.Y)
+                        {
+                            //stay on track to overwrite the data
+                            UserInterface.Clear_screen();
+                        }
+                        // i.e. if input is not Y or y
+                        else
+                        {
+                            //get out of the while loop! (skip all remaining code in the while loop
+                            invalid_file_name = false;
+                            continue;
+                        }
+                    }
+                    //if file doesn't exist, can't load the data
+                    else
+                    {
+                        UserInterface.Clear_screen();
+                        UserInterface.Display_message($"Could not find the file \"{file_name}\". Check the file path and\n");
+                        UserInterface.Display_message("Press <Y> to try a different file name or\nPress <X> to return to the main menu.");
+
+                        confirmation_input = Console.ReadKey();
+                        if(confirmation_input.Key == ConsoleKey.Y)
+                        {
+                            //stay in and finish the loop, i.e. do nothing
+                        }
+                        else
+                        {
+                            invalid_file_name = false;
+                            continue;
+                        }
+                    }
+
+                    //if the file loading is successful
+                    if (Load_From_File(file_name, list_of_members))
+                    {
+                        //exit the loop by changing the flag
+                        invalid_file_name = false;
+
+                        UserInterface.Display_message($"\nData saved successfully to {file_name}.");
+                        UserInterface.Block_program("Press any key to continue...");
+                    }
+                    //else, i.e. if the file saving is unsuccessful
+                    else
+                    {
+                        //if the saving is unsuccessful, error handling and messages will be displayed by Load_From_File()
+                        //return to the main menu
+                        invalid_file_name=false; //exit the loop
+                        break;
+                    }
+                }
+            }
+
         }
 
 
